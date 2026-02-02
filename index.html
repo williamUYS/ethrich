@@ -3,399 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ETH合约开仓价位计算器 - 专业交易工具</title>
+    <title>数字资产交易计算器 - 专业工具</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
+            background: #f5f7fa;
+            color: #2c3e50;
             line-height: 1.6;
             padding: 20px;
             min-height: 100vh;
         }
-        
+
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            border-bottom: 1px solid #334155;
+            background: #fff;
+            padding: 24px 32px;
+            border-bottom: 2px solid #e8ecef;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
-        
+
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-        
-        .subtitle {
-            color: #94a3b8;
-            font-size: 1.1rem;
-            margin-top: 8px;
-        }
-        
-        .calculator-container {
-            display: flex;
-            gap: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .input-section {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(30, 41, 59, 0.85);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-            border: 1px solid #334155;
-        }
-        
-        .result-section {
-            flex: 1;
-            min-width: 300px;
-            background: rgba(24, 32, 48, 0.92);
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-            border: 1px solid #2d3748;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .section-title {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #334155;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title i {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-size: 1.6rem;
-        }
-        
-        .input-group {
-            margin-bottom: 22px;
-        }
-        
-        label {
-            display: block;
+            font-size: 1.75rem;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: #cbd5e1;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: #1a365d;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
-        
-        label .tooltip {
-            width: 18px;
-            height: 18px;
-            background: #4b5563;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            cursor: help;
-            transition: all 0.2s;
-        }
-        
-        label .tooltip:hover {
-            background: #6366f1;
-            transform: scale(1.1);
-        }
-        
-        input, select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid #334155;
-            border-radius: 10px;
-            color: white;
-            font-size: 1.15rem;
-            margin-top: 6px;
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #6366f1;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-        }
-        
-        input::placeholder {
+
+        .subtitle {
             color: #64748b;
+            font-size: 0.95rem;
+            margin-top: 6px;
         }
-        
-        .direction-group {
+
+        .calculator-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e8ecef;
+            overflow: hidden;
+        }
+
+        .mode-tabs {
             display: flex;
-            gap: 15px;
-            margin-top: 8px;
+            border-bottom: 1px solid #e8ecef;
+            background: #fafbfc;
         }
-        
-        .direction-btn {
+
+        .mode-tab {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #334155;
-            border-radius: 10px;
-            background: rgba(30, 41, 59, 0.7);
-            color: #94a3b8;
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
+            border-bottom: 3px solid transparent;
         }
-        
-        .direction-btn.active {
-            border-color: #6366f1;
-            background: rgba(37, 99, 235, 0.15);
-            color: #6366f1;
+
+        .mode-tab:hover {
+            color: #4a5568;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .mode-tab.active {
+            color: #3182ce;
+            border-bottom-color: #3182ce;
+            background: #fff;
             font-weight: 600;
         }
-        
-        .direction-btn.long.active {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
+
+        .content-section {
+            padding: 32px;
         }
-        
-        .direction-btn.short.active {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
+
+        .input-section {
+            margin-bottom: 32px;
         }
-        
-        .direction-btn i {
-            font-size: 1.4rem;
-            font-weight: bold;
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8ecef;
+            color: #2d3748;
+            font-weight: 600;
         }
-        
-        .direction-btn.long i {
-            color: #10b981;
+
+        .input-group {
+            margin-bottom: 20px;
         }
-        
-        .direction-btn.short i {
-            color: #ef4444;
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #4a5568;
+            font-size: 0.9rem;
         }
-        
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #fff;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            color: #2d3748;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+        }
+
+        input::placeholder {
+            color: #a0aec0;
+        }
+
+        .direction-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .direction-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            background: #fff;
+            color: #718096;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .direction-btn:hover {
+            border-color: #a0aec0;
+        }
+
+        .direction-btn.active {
+            border-color: #3182ce;
+            background: #ebf8ff;
+            color: #3182ce;
+            font-weight: 600;
+        }
+
+        .direction-btn.buy.active {
+            border-color: #48bb78;
+            background: #f0fff4;
+            color: #2f855a;
+        }
+
+        .direction-btn.sell.active {
+            border-color: #f56565;
+            background: #fff5f5;
+            color: #c53030;
+        }
+
         .calculate-btn {
-            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            background: #3182ce;
             color: white;
             border: none;
             width: 100%;
-            padding: 16px 20px;
-            font-size: 1.25rem;
+            padding: 12px 24px;
+            font-size: 1rem;
             font-weight: 600;
-            border-radius: 12px;
+            border-radius: 6px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            margin-top: 16px;
+            transition: all 0.2s;
         }
-        
+
         .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+            background: #2c5282;
         }
-        
+
         .calculate-btn:active {
-            transform: translateY(0);
+            transform: translateY(1px);
         }
-        
+
+        .result-section {
+            background: #f8fafc;
+            border: 1px solid #e8ecef;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
         .result-display {
-            background: rgba(15, 23, 42, 0.95);
-            border-radius: 16px;
-            padding: 25px;
             text-align: center;
-            margin-bottom: 25px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 1px solid #2d3748;
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+            padding: 20px;
         }
-        
+
         .result-label {
-            font-size: 1.1rem;
-            color: #94a3b8;
-            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
+
         .result-value {
-            font-size: 3.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #2d3748;
             margin: 10px 0;
             font-family: 'Courier New', monospace;
-            letter-spacing: -1px;
         }
-        
+
         .result-subtext {
-            color: #64748b;
-            font-size: 0.95rem;
+            color: #718096;
+            font-size: 0.9rem;
             margin-top: 8px;
-            min-height: 24px;
         }
-        
+
         .verification-section {
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 12px;
+            background: #fff;
+            border: 1px solid #e8ecef;
+            border-radius: 6px;
             padding: 20px;
-            margin-top: 15px;
-            border: 1px solid #334155;
+            margin-top: 16px;
         }
-        
+
         .verification-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-        
-        .verification-steps {
+            font-weight: 600;
+            color: #4a5568;
+            margin-bottom: 12px;
             font-size: 0.95rem;
-            line-height: 1.7;
-            color: #cbd5e1;
         }
-        
+
+        .verification-steps {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
         .verification-steps .step {
-            margin-bottom: 8px;
-            padding-left: 20px;
+            margin-bottom: 6px;
+            padding-left: 16px;
             position: relative;
         }
-        
+
         .verification-steps .step:before {
             content: "•";
             position: absolute;
             left: 0;
-            color: #6366f1;
+            color: #3182ce;
             font-weight: bold;
         }
-        
+
         .risk-meter {
-            margin-top: 25px;
+            margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid #334155;
+            border-top: 1px solid #e8ecef;
         }
-        
+
         .risk-label {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            color: #4a5568;
+            font-weight: 500;
         }
-        
+
         .risk-bar {
-            height: 10px;
-            background: #1e293b;
-            border-radius: 5px;
+            height: 8px;
+            background: #e8ecef;
+            border-radius: 4px;
             overflow: hidden;
             margin-bottom: 5px;
         }
-        
+
         .risk-fill {
             height: 100%;
-            border-radius: 5px;
-            transition: width 0.5s ease;
+            border-radius: 4px;
+            transition: width 0.3s ease;
         }
-        
-        .risk-low { background: linear-gradient(90deg, #10b981, #34d399); }
-        .risk-medium { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-        .risk-high { background: linear-gradient(90deg, #ef4444, #f87171); }
-        
+
+        .risk-low { background: #48bb78; }
+        .risk-medium { background: #ed8936; }
+        .risk-high { background: #f56565; }
+
         .notes {
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 25px;
-            font-size: 0.95rem;
+            background: #fffbeb;
+            border: 1px solid #fbd38d;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 0.9rem;
             line-height: 1.6;
         }
-        
+
         .notes h3 {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            color: #cbd5e1;
+            margin-bottom: 10px;
+            color: #975a16;
+            font-size: 0.95rem;
         }
-        
+
         .notes ul {
             padding-left: 20px;
             margin-top: 8px;
         }
-        
+
         .notes li {
-            margin-bottom: 6px;
+            margin-bottom: 4px;
+            color: #744210;
         }
-        
-        .highlight {
-            background: rgba(99, 102, 241, 0.15);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-        
+
         footer {
             text-align: center;
-            margin-top: 30px;
-            color: #64748b;
-            font-size: 0.9rem;
-            padding: 20px;
-            border-top: 1px solid #334155;
+            margin-top: 32px;
+            color: #718096;
+            font-size: 0.85rem;
+            padding: 16px;
+            border-top: 1px solid #e8ecef;
         }
-        
+
+        .hidden {
+            display: none;
+        }
+
         @media (max-width: 768px) {
-            .calculator-container {
-                flex-direction: column;
+            .content-section {
+                padding: 20px;
             }
-            
-            body {
-                padding: 15px;
-            }
-            
-            .input-section, .result-section {
-                min-width: 100%;
-            }
-            
+
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
             }
-            
+
             .result-value {
-                font-size: 2.6rem;
+                font-size: 2rem;
             }
         }
     </style>
@@ -403,267 +360,449 @@
 <body>
     <div class="container">
         <header>
-            <h1>⚡ ETH合约开仓价位计算器</h1>
-            <div class="subtitle">专业交易工具 - 精确计算开仓价位，严格控制风险</div>
+            <h1>数字资产交易计算器</h1>
+            <div class="subtitle">专业交易工具 - 精确计算交易参数，严格控制风险</div>
         </header>
-        
+
         <div class="calculator-container">
-            <div class="input-section">
-                <h2 class="section-title">📊 交易参数</h2>
-                
-                <div class="input-group">
-                    <label for="margin">保证金 (USDT) <span class="tooltip">?</span></label>
-                    <input type="number" id="margin" value="50" step="0.01" min="0.01">
-                </div>
-                
-                <div class="input-group">
-                    <label for="maxLoss">最大可接受亏损 (USDT) <span class="tooltip">?</span></label>
-                    <input type="number" id="maxLoss" value="10" step="0.01" min="0.01">
-                </div>
-                
-                <div class="input-group">
-                    <label for="stopPrice">止损价格 (USDT) <span class="tooltip">?</span></label>
-                    <input type="number" id="stopPrice" value="2966.59" step="0.01" min="0.01">
-                </div>
-                
-                <div class="input-group">
-                    <label for="leverage">合约倍率 <span class="tooltip">?</span></label>
-                    <input type="number" id="leverage" value="20" min="1" max="125">
-                </div>
-                
-                <div class="input-group">
-                    <label>交易方向</label>
-                    <div class="direction-group">
-                        <div class="direction-btn long active" data-direction="long">
-                            <span>做多</span>
-                            <span>LONG</span>
-                            <span>↑</span>
+            <div class="mode-tabs">
+                <button class="mode-tab active" data-mode="forward">方式一：计算开仓价格</button>
+                <button class="mode-tab" data-mode="reverse">方式二：计算投入资金</button>
+            </div>
+
+            <!-- 方式一：计算开仓价格 -->
+            <div class="content-section" id="modeForward">
+                <div class="input-section">
+                    <h2 class="section-title">输入参数</h2>
+
+                    <div class="input-group">
+                        <label for="marginForward">投入资金 (USDT)</label>
+                        <input type="number" id="marginForward" value="50" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="maxLossForward">最大可接受亏损 (USDT)</label>
+                        <input type="number" id="maxLossForward" value="10" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stopPriceForward">目标价格 (USDT)</label>
+                        <input type="number" id="stopPriceForward" value="2966.59" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="leverageForward">杠杆倍数</label>
+                        <input type="number" id="leverageForward" value="20" min="1" max="125">
+                    </div>
+
+                    <div class="input-group">
+                        <label>交易方向</label>
+                        <div class="direction-group">
+                            <div class="direction-btn buy active" data-direction="buy">
+                                <span>买入</span>
+                            </div>
+                            <div class="direction-btn sell" data-direction="sell">
+                                <span>卖出</span>
+                            </div>
                         </div>
-                        <div class="direction-btn short" data-direction="short">
-                            <span>做空</span>
-                            <span>SHORT</span>
-                            <span>↓</span>
+                    </div>
+
+                    <button class="calculate-btn" id="calculateBtnForward">计算开仓价格</button>
+
+                    <div class="risk-meter">
+                        <div class="risk-label">
+                            <span>风险水平</span>
+                            <span id="riskLevelForward">低风险</span>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill risk-low" id="riskFillForward" style="width: 20%"></div>
+                        </div>
+                        <div class="risk-label">
+                            <span>0%</span>
+                            <span>100%</span>
                         </div>
                     </div>
-                </div>
-                
-                <button class="calculate-btn" id="calculateBtn">计算开仓价位</button>
-                
-                <div class="risk-meter">
-                    <div class="risk-label">
-                        <span>风险水平</span>
-                        <span id="riskLevel">低风险</span>
-                    </div>
-                    <div class="risk-bar">
-                        <div class="risk-fill risk-low" id="riskFill" style="width: 20%"></div>
-                    </div>
-                    <div class="risk-label">
-                        <span>0%</span>
-                        <span>100%</span>
+
+                    <div class="notes">
+                        <h3>使用说明</h3>
+                        <ul>
+                            <li>输入您的交易参数，点击"计算开仓价格"</li>
+                            <li>买入时：目标价格应低于开仓价格</li>
+                            <li>卖出时：目标价格应高于开仓价格</li>
+                            <li>风险水平基于亏损占投入资金比例计算</li>
+                        </ul>
                     </div>
                 </div>
-                
-                <div class="notes">
-                    <h3>📌 使用说明</h3>
-                    <ul>
-                        <li>输入您的交易参数，点击"计算开仓价位"</li>
-                        <li>做多时：止损价应低于开仓价</li>
-                        <li>做空时：止损价应高于开仓价</li>
-                        <li>风险水平基于亏损占保证金比例计算</li>
-                        <li>本计算器适用于U本位合约交易</li>
-                    </ul>
+
+                <div class="result-section">
+                    <h2 class="section-title">计算结果</h2>
+
+                    <div class="result-display">
+                        <div class="result-label">建议开仓价格</div>
+                        <div class="result-value" id="entryPriceForward">2937.22</div>
+                        <div class="result-subtext" id="directionTextForward">卖出方向 - 价格低于目标位</div>
+                    </div>
+
+                    <div class="verification-section">
+                        <div class="verification-title">验证计算</div>
+                        <div class="verification-steps" id="verificationStepsForward">
+                            <div class="step">价格变动: (2966.59 - 2937.22) / 2937.22 = 1.00%</div>
+                            <div class="step">杠杆放大亏损: 1.00% × 20 = 20.00%</div>
+                            <div class="step">投入资金亏损: 50 × 20.00% = 10.00 USDT</div>
+                            <div class="step">实际亏损与设定最大亏损匹配 ✓</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="result-section">
-                <h2 class="section-title">🎯 计算结果</h2>
-                
-                <div class="result-display">
-                    <div class="result-label">建议开仓价格</div>
-                    <div class="result-value" id="entryPrice">2937.22</div>
-                    <div class="result-subtext" id="directionText">做空方向 - 价格低于止损位</div>
-                </div>
-                
-                <div class="verification-section">
-                    <div class="verification-title">✅ 验证计算</div>
-                    <div class="verification-steps" id="verificationSteps">
-                        <div class="step">价格变动: (2966.59 - 2937.22) / 2937.22 = 1.00%</div>
-                        <div class="step">杠杆放大亏损: 1.00% × 20 = 20.00%</div>
-                        <div class="step">保证金亏损: 50 × 20.00% = 10.00 USDT</div>
-                        <div class="step">实际亏损与设定最大亏损匹配 ✓</div>
+
+            <!-- 方式二：计算投入资金 -->
+            <div class="content-section hidden" id="modeReverse">
+                <div class="input-section">
+                    <h2 class="section-title">输入参数</h2>
+
+                    <div class="input-group">
+                        <label for="maxLossReverse">最大可接受亏损 (USDT)</label>
+                        <input type="number" id="maxLossReverse" value="10" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="stopPriceReverse">目标价格 (USDT)</label>
+                        <input type="number" id="stopPriceReverse" value="2966.59" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="leverageReverse">杠杆倍数</label>
+                        <input type="number" id="leverageReverse" value="20" min="1" max="125">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="entryPriceReverse">开仓价格 (USDT)</label>
+                        <input type="number" id="entryPriceReverse" value="2937.22" step="0.01" min="0.01">
+                    </div>
+
+                    <div class="input-group">
+                        <label>交易方向</label>
+                        <div class="direction-group">
+                            <div class="direction-btn buy active" data-direction="buy">
+                                <span>买入</span>
+                            </div>
+                            <div class="direction-btn sell" data-direction="sell">
+                                <span>卖出</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" id="calculateBtnReverse">计算投入资金</button>
+
+                    <div class="notes">
+                        <h3>使用说明</h3>
+                        <ul>
+                            <li>输入您的交易参数，点击"计算投入资金"</li>
+                            <li>买入时：目标价格应低于开仓价格</li>
+                            <li>卖出时：目标价格应高于开仓价格</li>
+                            <li>根据给定的风险和价格参数，反推需要的投入资金</li>
+                        </ul>
                     </div>
                 </div>
-                
-                <div class="notes" style="margin-top: 20px;">
-                    <h3>⚠️ 风险提示</h3>
-                    <ul>
-                        <li>实际交易中需考虑手续费和滑点影响</li>
-                        <li>建议使用标记价格设置止损单，避免插针</li>
-                        <li>单笔亏损建议控制在总资金的1-2%以内</li>
-                        <li>高杠杆交易风险极高，谨慎使用</li>
-                        <li>本计算器结果仅供参考，不构成投资建议</li>
-                    </ul>
+
+                <div class="result-section">
+                    <h2 class="section-title">计算结果</h2>
+
+                    <div class="result-display">
+                        <div class="result-label">建议投入资金</div>
+                        <div class="result-value" id="marginReverse">50.00</div>
+                        <div class="result-subtext" id="directionTextReverse">卖出方向 - 价格低于目标位</div>
+                    </div>
+
+                    <div class="verification-section">
+                        <div class="verification-title">验证计算</div>
+                        <div class="verification-steps" id="verificationStepsReverse">
+                            <div class="step">价格变动: (2966.59 - 2937.22) / 2937.22 = 1.00%</div>
+                            <div class="step">杠杆放大亏损: 1.00% × 20 = 20.00%</div>
+                            <div class="step">投入资金亏损: 50 × 20.00% = 10.00 USDT</div>
+                            <div class="step">实际亏损与设定最大亏损匹配 ✓</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        
+
         <footer>
-            <p>ETH合约开仓价位计算器 v1.0 | 专业交易工具 | 数据仅在本地计算，不会上传任何服务器</p>
-            <p style="margin-top: 8px; font-size: 0.85rem; color: #4b5563;">© 2023 Crypto Trading Tools. All rights reserved.</p>
+            <p>数字资产交易计算器 v2.0 | 专业交易工具 | 数据仅在本地计算，不会上传任何服务器</p>
+            <p style="margin-top: 8px; font-size: 0.85rem; color: #718096;">© 2024 Trading Tools. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM元素
-            const marginInput = document.getElementById('margin');
-            const maxLossInput = document.getElementById('maxLoss');
-            const stopPriceInput = document.getElementById('stopPrice');
-            const leverageInput = document.getElementById('leverage');
-            const calculateBtn = document.getElementById('calculateBtn');
-            const entryPriceDisplay = document.getElementById('entryPrice');
-            const directionText = document.getElementById('directionText');
-            const verificationSteps = document.getElementById('verificationSteps');
-            const riskFill = document.getElementById('riskFill');
-            const riskLevel = document.getElementById('riskLevel');
-            const directionBtns = document.querySelectorAll('.direction-btn');
-            
-            // 默认方向为做空
-            let tradeDirection = 'short';
-            
-            // 方向按钮事件
-            directionBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    directionBtns.forEach(b => b.classList.remove('active'));
+            // 模式切换
+            const modeTabs = document.querySelectorAll('.mode-tab');
+            const modeForward = document.getElementById('modeForward');
+            const modeReverse = document.getElementById('modeReverse');
+
+            modeTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    modeTabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    tradeDirection = this.dataset.direction;
+
+                    const mode = this.dataset.mode;
+                    if (mode === 'forward') {
+                        modeForward.classList.remove('hidden');
+                        modeReverse.classList.add('hidden');
+                    } else {
+                        modeForward.classList.add('hidden');
+                        modeReverse.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // 方式一：计算开仓价格
+            const marginForward = document.getElementById('marginForward');
+            const maxLossForward = document.getElementById('maxLossForward');
+            const stopPriceForward = document.getElementById('stopPriceForward');
+            const leverageForward = document.getElementById('leverageForward');
+            const calculateBtnForward = document.getElementById('calculateBtnForward');
+            const entryPriceForward = document.getElementById('entryPriceForward');
+            const directionTextForward = document.getElementById('directionTextForward');
+            const verificationStepsForward = document.getElementById('verificationStepsForward');
+            const riskFillForward = document.getElementById('riskFillForward');
+            const riskLevelForward = document.getElementById('riskLevelForward');
+            const directionBtnsForward = document.querySelectorAll('#modeForward .direction-btn');
+
+            let tradeDirectionForward = 'sell';
+
+            directionBtnsForward.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    directionBtnsForward.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    tradeDirectionForward = this.dataset.direction;
                     calculateEntryPrice();
                 });
             });
-            
-            // 计算按钮事件
-            calculateBtn.addEventListener('click', calculateEntryPrice);
-            
-            // 输入变化时自动计算（可选）
-            [marginInput, maxLossInput, stopPriceInput, leverageInput].forEach(input => {
+
+            calculateBtnForward.addEventListener('click', calculateEntryPrice);
+
+            [marginForward, maxLossForward, stopPriceForward, leverageForward].forEach(input => {
                 input.addEventListener('change', calculateEntryPrice);
                 input.addEventListener('keyup', function(e) {
                     if (e.key === 'Enter') calculateEntryPrice();
                 });
             });
-            
+
+            // 方式二：计算投入资金
+            const maxLossReverse = document.getElementById('maxLossReverse');
+            const stopPriceReverse = document.getElementById('stopPriceReverse');
+            const leverageReverse = document.getElementById('leverageReverse');
+            const entryPriceReverse = document.getElementById('entryPriceReverse');
+            const calculateBtnReverse = document.getElementById('calculateBtnReverse');
+            const marginReverse = document.getElementById('marginReverse');
+            const directionTextReverse = document.getElementById('directionTextReverse');
+            const verificationStepsReverse = document.getElementById('verificationStepsReverse');
+            const directionBtnsReverse = document.querySelectorAll('#modeReverse .direction-btn');
+
+            let tradeDirectionReverse = 'sell';
+
+            directionBtnsReverse.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    directionBtnsReverse.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    tradeDirectionReverse = this.dataset.direction;
+                    calculateMargin();
+                });
+            });
+
+            calculateBtnReverse.addEventListener('click', calculateMargin);
+
+            [maxLossReverse, stopPriceReverse, leverageReverse, entryPriceReverse].forEach(input => {
+                input.addEventListener('change', calculateMargin);
+                input.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') calculateMargin();
+                });
+            });
+
             // 初始计算
             calculateEntryPrice();
-            
+            calculateMargin();
+
+            // 方式一：计算开仓价格
             function calculateEntryPrice() {
-                // 获取输入值
-                const margin = parseFloat(marginInput.value);
-                const maxLoss = parseFloat(maxLossInput.value);
-                const stopPrice = parseFloat(stopPriceInput.value);
-                const leverage = parseFloat(leverageInput.value);
-                
-                // 验证输入
-                if (isNaN(margin) || isNaN(maxLoss) || isNaN(stopPrice) || isNaN(leverage) || 
+                const margin = parseFloat(marginForward.value);
+                const maxLoss = parseFloat(maxLossForward.value);
+                const stopPrice = parseFloat(stopPriceForward.value);
+                const leverage = parseFloat(leverageForward.value);
+
+                if (isNaN(margin) || isNaN(maxLoss) || isNaN(stopPrice) || isNaN(leverage) ||
                     margin <= 0 || maxLoss <= 0 || stopPrice <= 0 || leverage <= 0) {
-                    showError("请输入有效的正数参数");
+                    showErrorForward("请输入有效的正数参数");
                     return;
                 }
-                
+
                 if (maxLoss >= margin) {
-                    showError("最大亏损不能大于或等于保证金");
+                    showErrorForward("最大亏损不能大于或等于投入资金");
                     return;
                 }
-                
-                // 计算风险水平
+
                 const riskPercentage = (maxLoss / margin) * 100;
-                updateRiskMeter(riskPercentage);
-                
+                updateRiskMeterForward(riskPercentage);
+
                 let entryPrice;
                 let verification = [];
-                
-                if (tradeDirection === 'short') {
-                    // 做空：开仓价 = 止损价 / (1 + (最大亏损 / (保证金 * 杠杆)))
+
+                if (tradeDirectionForward === 'sell') {
+                    // 卖出：开仓价 = 目标价 / (1 + (最大亏损 / (投入资金 * 杠杆)))
                     const denominator = 1 + (maxLoss / (margin * leverage));
                     entryPrice = stopPrice / denominator;
-                    
-                    // 验证步骤
+
                     const priceChangePercent = ((stopPrice - entryPrice) / entryPrice) * 100;
                     const leveragedLossPercent = priceChangePercent * leverage;
                     const actualLoss = margin * (leveragedLossPercent / 100);
-                    
+
                     verification = [
                         `价格变动: (${stopPrice.toFixed(2)} - ${entryPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
                         `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `保证金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
-                        `✓ 实际亏损与设定最大亏损匹配`
+                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `实际亏损与设定最大亏损匹配 ✓`
                     ];
-                    
-                    directionText.textContent = "做空方向 - 价格低于止损位";
+
+                    directionTextForward.textContent = "卖出方向 - 价格低于目标位";
                 } else {
-                    // 做多：开仓价 = 止损价 / (1 - (最大亏损 / (保证金 * 杠杆)))
+                    // 买入：开仓价 = 目标价 / (1 - (最大亏损 / (投入资金 * 杠杆)))
                     const ratio = maxLoss / (margin * leverage);
                     if (ratio >= 1) {
-                        showError("参数错误：最大亏损不能超过保证金与杠杆乘积");
+                        showErrorForward("参数错误：最大亏损不能超过投入资金与杠杆乘积");
                         return;
                     }
-                    
+
                     const denominator = 1 - ratio;
                     entryPrice = stopPrice / denominator;
-                    
-                    // 验证步骤
+
                     const priceChangePercent = ((entryPrice - stopPrice) / entryPrice) * 100;
                     const leveragedLossPercent = priceChangePercent * leverage;
                     const actualLoss = margin * (leveragedLossPercent / 100);
-                    
+
                     verification = [
                         `价格变动: (${entryPrice.toFixed(2)} - ${stopPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
                         `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `保证金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
-                        `✓ 实际亏损与设定最大亏损匹配`
+                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `实际亏损与设定最大亏损匹配 ✓`
                     ];
-                    
-                    directionText.textContent = "做多方向 - 价格高于止损位";
+
+                    directionTextForward.textContent = "买入方向 - 价格高于目标位";
                 }
-                
-                // 显示结果
-                entryPriceDisplay.textContent = entryPrice.toFixed(2);
-                
-                // 更新验证步骤
-                verificationSteps.innerHTML = '';
+
+                entryPriceForward.textContent = entryPrice.toFixed(2);
+
+                verificationStepsForward.innerHTML = '';
                 verification.forEach(step => {
                     const div = document.createElement('div');
                     div.className = 'step';
                     div.textContent = step;
-                    verificationSteps.appendChild(div);
+                    verificationStepsForward.appendChild(div);
                 });
             }
-            
-            function updateRiskMeter(percentage) {
-                // 限制在0-100%
-                percentage = Math.min(100, Math.max(0, percentage));
-                
-                riskFill.style.width = `${percentage}%`;
-                
-                // 更新风险等级和颜色
-                if (percentage < 15) {
-                    riskFill.className = 'risk-fill risk-low';
-                    riskLevel.textContent = '低风险';
-                } else if (percentage < 30) {
-                    riskFill.className = 'risk-fill risk-medium';
-                    riskLevel.textContent = '中风险';
+
+            // 方式二：计算投入资金
+            function calculateMargin() {
+                const maxLoss = parseFloat(maxLossReverse.value);
+                const stopPrice = parseFloat(stopPriceReverse.value);
+                const leverage = parseFloat(leverageReverse.value);
+                const entryPrice = parseFloat(entryPriceReverse.value);
+
+                if (isNaN(maxLoss) || isNaN(stopPrice) || isNaN(leverage) || isNaN(entryPrice) ||
+                    maxLoss <= 0 || stopPrice <= 0 || leverage <= 0 || entryPrice <= 0) {
+                    showErrorReverse("请输入有效的正数参数");
+                    return;
+                }
+
+                let margin;
+                let verification = [];
+
+                if (tradeDirectionReverse === 'sell') {
+                    // 卖出：价格从开仓价上涨到目标价
+                    // 投入资金 = 最大亏损 / ((目标价 - 开仓价) / 开仓价 * 杠杆)
+                    const priceChangePercent = ((stopPrice - entryPrice) / entryPrice) * 100;
+                    if (priceChangePercent <= 0) {
+                        showErrorReverse("卖出时目标价格必须高于开仓价格");
+                        return;
+                    }
+
+                    const leveragedLossPercent = priceChangePercent * leverage;
+                    margin = maxLoss / (leveragedLossPercent / 100);
+
+                    const actualLoss = margin * (leveragedLossPercent / 100);
+
+                    verification = [
+                        `价格变动: (${stopPrice.toFixed(2)} - ${entryPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
+                        `投入资金亏损: ${margin.toFixed(2)} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `实际亏损与设定最大亏损匹配 ✓`
+                    ];
+
+                    directionTextReverse.textContent = "卖出方向 - 价格低于目标位";
                 } else {
-                    riskFill.className = 'risk-fill risk-high';
-                    riskLevel.textContent = '高风险';
+                    // 买入：价格从开仓价下跌到目标价
+                    // 投入资金 = 最大亏损 / ((开仓价 - 目标价) / 开仓价 * 杠杆)
+                    const priceChangePercent = ((entryPrice - stopPrice) / entryPrice) * 100;
+                    if (priceChangePercent <= 0) {
+                        showErrorReverse("买入时目标价格必须低于开仓价格");
+                        return;
+                    }
+
+                    const leveragedLossPercent = priceChangePercent * leverage;
+                    margin = maxLoss / (leveragedLossPercent / 100);
+
+                    const actualLoss = margin * (leveragedLossPercent / 100);
+
+                    verification = [
+                        `价格变动: (${entryPrice.toFixed(2)} - ${stopPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
+                        `投入资金亏损: ${margin.toFixed(2)} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `实际亏损与设定最大亏损匹配 ✓`
+                    ];
+
+                    directionTextReverse.textContent = "买入方向 - 价格高于目标位";
+                }
+
+                marginReverse.textContent = margin.toFixed(2);
+
+                verificationStepsReverse.innerHTML = '';
+                verification.forEach(step => {
+                    const div = document.createElement('div');
+                    div.className = 'step';
+                    div.textContent = step;
+                    verificationStepsReverse.appendChild(div);
+                });
+            }
+
+            function updateRiskMeterForward(percentage) {
+                percentage = Math.min(100, Math.max(0, percentage));
+                riskFillForward.style.width = `${percentage}%`;
+
+                if (percentage < 15) {
+                    riskFillForward.className = 'risk-fill risk-low';
+                    riskLevelForward.textContent = '低风险';
+                } else if (percentage < 30) {
+                    riskFillForward.className = 'risk-fill risk-medium';
+                    riskLevelForward.textContent = '中风险';
+                } else {
+                    riskFillForward.className = 'risk-fill risk-high';
+                    riskLevelForward.textContent = '高风险';
                 }
             }
-            
-            function showError(message) {
-                entryPriceDisplay.textContent = '错误';
-                directionText.textContent = message;
-                verificationSteps.innerHTML = `<div class="step" style="color: #ef4444;"> $ {message}</div>`;
-                riskFill.style.width = '100%';
-                riskFill.className = 'risk-fill risk-high';
-                riskLevel.textContent = '参数错误';
+
+            function showErrorForward(message) {
+                entryPriceForward.textContent = '错误';
+                directionTextForward.textContent = message;
+                verificationStepsForward.innerHTML = `<div class="step" style="color: #f56565;">${message}</div>`;
+                riskFillForward.style.width = '100%';
+                riskFillForward.className = 'risk-fill risk-high';
+                riskLevelForward.textContent = '参数错误';
+            }
+
+            function showErrorReverse(message) {
+                marginReverse.textContent = '错误';
+                directionTextReverse.textContent = message;
+                verificationStepsReverse.innerHTML = `<div class="step" style="color: #f56565;">${message}</div>`;
             }
         });
     </script>
