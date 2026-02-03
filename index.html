@@ -368,88 +368,94 @@
             <div class="mode-tabs">
                 <button class="mode-tab active" data-mode="forward">方式一：计算开仓价格</button>
                 <button class="mode-tab" data-mode="reverse">方式二：计算投入资金</button>
+                <button class="mode-tab" data-mode="atr">方式三：ATR动态止损计算</button>
             </div>
 
             <!-- 方式一：计算开仓价格 -->
             <div class="content-section" id="modeForward">
-                <div class="input-section">
-                    <h2 class="section-title">输入参数</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <!-- 左侧：输入参数 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <div class="input-section">
+                            <h2 class="section-title">输入参数</h2>
 
-                    <div class="input-group">
-                        <label for="marginForward">投入资金 (USDT)</label>
-                        <input type="number" id="marginForward" value="50" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="maxLossForward">最大可接受亏损 (USDT)</label>
-                        <input type="number" id="maxLossForward" value="10" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="stopPriceForward">目标价格 (USDT)</label>
-                        <input type="number" id="stopPriceForward" value="2966.59" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="leverageForward">杠杆倍数</label>
-                        <input type="number" id="leverageForward" value="20" min="1" max="125">
-                    </div>
-
-                    <div class="input-group">
-                        <label>交易方向</label>
-                        <div class="direction-group">
-                            <div class="direction-btn buy active" data-direction="buy">
-                                <span>买入</span>
+                            <div class="input-group">
+                                <label for="marginForward">投入资金 (USDT)</label>
+                                <input type="number" id="marginForward" step="0.01" min="0.01" placeholder="请输入投入资金">
                             </div>
-                            <div class="direction-btn sell" data-direction="sell">
-                                <span>卖出</span>
+
+                            <div class="input-group">
+                                <label for="maxLossForward">最大可接受亏损 (USDT)</label>
+                                <input type="number" id="maxLossForward" step="0.01" min="0.01" placeholder="请输入最大可接受亏损">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="stopPriceForward">止损价格 (USDT)</label>
+                                <input type="number" id="stopPriceForward" step="0.01" min="0.01" placeholder="请输入止损价格">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="leverageForward">杠杆倍数</label>
+                                <input type="number" id="leverageForward" value="20" min="1" max="125">
+                            </div>
+
+                            <div class="input-group">
+                                <label>交易方向</label>
+                                <div class="direction-group">
+                                    <div class="direction-btn sell active" data-direction="sell">
+                                        <span>卖出</span>
+                                    </div>
+                                    <div class="direction-btn buy" data-direction="buy">
+                                        <span>买入</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="calculate-btn" id="calculateBtnForward">计算开仓价格</button>
+
+                            <div class="risk-meter">
+                                <div class="risk-label">
+                                    <span>风险水平</span>
+                                    <span id="riskLevelForward">低风险</span>
+                                </div>
+                                <div class="risk-bar">
+                                    <div class="risk-fill risk-low" id="riskFillForward" style="width: 20%"></div>
+                                </div>
+                                <div class="risk-label">
+                                    <span>0%</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+
+                            <div class="notes">
+                                <h3>使用说明</h3>
+                                <ul>
+                                    <li>输入您的交易参数，点击"计算开仓价格"</li>
+                                    <li>买入时：止损价格应低于开仓价格</li>
+                                    <li>卖出时：止损价格应高于开仓价格</li>
+                                    <li>风险水平基于亏损占投入资金比例计算</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    <button class="calculate-btn" id="calculateBtnForward">计算开仓价格</button>
+                    <!-- 右侧：结果展示 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <div class="result-section">
+                            <h2 class="section-title">计算结果</h2>
 
-                    <div class="risk-meter">
-                        <div class="risk-label">
-                            <span>风险水平</span>
-                            <span id="riskLevelForward">低风险</span>
-                        </div>
-                        <div class="risk-bar">
-                            <div class="risk-fill risk-low" id="riskFillForward" style="width: 20%"></div>
-                        </div>
-                        <div class="risk-label">
-                            <span>0%</span>
-                            <span>100%</span>
-                        </div>
-                    </div>
+                            <div class="result-display">
+                                <div class="result-label">建议开仓价格</div>
+                                <div class="result-value" id="entryPriceForward">-</div>
+                                <div class="result-subtext" id="directionTextForward">-</div>
+                            </div>
 
-                    <div class="notes">
-                        <h3>使用说明</h3>
-                        <ul>
-                            <li>输入您的交易参数，点击"计算开仓价格"</li>
-                            <li>买入时：目标价格应低于开仓价格</li>
-                            <li>卖出时：目标价格应高于开仓价格</li>
-                            <li>风险水平基于亏损占投入资金比例计算</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="result-section">
-                    <h2 class="section-title">计算结果</h2>
-
-                    <div class="result-display">
-                        <div class="result-label">建议开仓价格</div>
-                        <div class="result-value" id="entryPriceForward">2937.22</div>
-                        <div class="result-subtext" id="directionTextForward">卖出方向 - 价格低于目标位</div>
-                    </div>
-
-                    <div class="verification-section">
-                        <div class="verification-title">验证计算</div>
-                        <div class="verification-steps" id="verificationStepsForward">
-                            <div class="step">价格变动: (2966.59 - 2937.22) / 2937.22 = 1.00%</div>
-                            <div class="step">杠杆放大亏损: 1.00% × 20 = 20.00%</div>
-                            <div class="step">投入资金亏损: 50 × 20.00% = 10.00 USDT</div>
-                            <div class="step">实际亏损与设定最大亏损匹配 ✓</div>
+                            <div class="verification-section">
+                                <div class="verification-title">验证计算</div>
+                                <div class="verification-steps" id="verificationStepsForward">
+                                    <div class="step">请输入参数并计算</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -457,70 +463,216 @@
 
             <!-- 方式二：计算投入资金 -->
             <div class="content-section hidden" id="modeReverse">
-                <div class="input-section">
-                    <h2 class="section-title">输入参数</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <!-- 左侧：输入参数 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <div class="input-section">
+                            <h2 class="section-title">输入参数</h2>
 
-                    <div class="input-group">
-                        <label for="maxLossReverse">最大可接受亏损 (USDT)</label>
-                        <input type="number" id="maxLossReverse" value="10" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="stopPriceReverse">目标价格 (USDT)</label>
-                        <input type="number" id="stopPriceReverse" value="2966.59" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="leverageReverse">杠杆倍数</label>
-                        <input type="number" id="leverageReverse" value="20" min="1" max="125">
-                    </div>
-
-                    <div class="input-group">
-                        <label for="entryPriceReverse">开仓价格 (USDT)</label>
-                        <input type="number" id="entryPriceReverse" value="2937.22" step="0.01" min="0.01">
-                    </div>
-
-                    <div class="input-group">
-                        <label>交易方向</label>
-                        <div class="direction-group">
-                            <div class="direction-btn buy active" data-direction="buy">
-                                <span>买入</span>
+                            <div class="input-group">
+                                <label for="maxLossReverse">最大可接受亏损 (USDT)</label>
+                                <input type="number" id="maxLossReverse" step="0.01" min="0.01" placeholder="请输入最大可接受亏损">
                             </div>
-                            <div class="direction-btn sell" data-direction="sell">
-                                <span>卖出</span>
+
+                            <div class="input-group">
+                                <label for="stopPriceReverse">止损价格 (USDT)</label>
+                                <input type="number" id="stopPriceReverse" step="0.01" min="0.01" placeholder="请输入止损价格">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="leverageReverse">杠杆倍数</label>
+                                <input type="number" id="leverageReverse" value="20" min="1" max="125">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="entryPriceReverse">开仓价格 (USDT)</label>
+                                <input type="number" id="entryPriceReverse" step="0.01" min="0.01" placeholder="请输入开仓价格">
+                            </div>
+
+                            <div class="input-group">
+                                <label>交易方向</label>
+                                <div class="direction-group">
+                                    <div class="direction-btn sell active" data-direction="sell">
+                                        <span>卖出</span>
+                                    </div>
+                                    <div class="direction-btn buy" data-direction="buy">
+                                        <span>买入</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="calculate-btn" id="calculateBtnReverse">计算投入资金</button>
+
+                            <div class="notes">
+                                <h3>使用说明</h3>
+                                <ul>
+                                    <li>输入您的交易参数，点击"计算投入资金"</li>
+                                    <li>买入时：止损价格应低于开仓价格</li>
+                                    <li>卖出时：止损价格应高于开仓价格</li>
+                                    <li>根据给定的风险和价格参数，反推需要的投入资金</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    <button class="calculate-btn" id="calculateBtnReverse">计算投入资金</button>
+                    <!-- 右侧：结果展示 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <div class="result-section">
+                            <h2 class="section-title">计算结果</h2>
 
-                    <div class="notes">
-                        <h3>使用说明</h3>
-                        <ul>
-                            <li>输入您的交易参数，点击"计算投入资金"</li>
-                            <li>买入时：目标价格应低于开仓价格</li>
-                            <li>卖出时：目标价格应高于开仓价格</li>
-                            <li>根据给定的风险和价格参数，反推需要的投入资金</li>
-                        </ul>
+                            <div class="result-display">
+                                <div class="result-label">建议投入资金</div>
+                                <div class="result-value" id="marginReverse">-</div>
+                                <div class="result-subtext" id="directionTextReverse">-</div>
+                            </div>
+
+                            <div class="verification-section">
+                                <div class="verification-title">验证计算</div>
+                                <div class="verification-steps" id="verificationStepsReverse">
+                                    <div class="step">请输入参数并计算</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="result-section">
-                    <h2 class="section-title">计算结果</h2>
+            <!-- 方式三：ATR动态止损计算 -->
+            <div class="content-section hidden" id="modeAtr">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <!-- 左侧：输入参数 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <div class="input-section">
+                            <h2 class="section-title">输入参数</h2>
 
-                    <div class="result-display">
-                        <div class="result-label">建议投入资金</div>
-                        <div class="result-value" id="marginReverse">50.00</div>
-                        <div class="result-subtext" id="directionTextReverse">卖出方向 - 价格低于目标位</div>
+                            <div class="input-group">
+                                <label>交易方向</label>
+                                <div class="direction-group">
+                                    <div class="direction-btn sell active" data-direction="sell" id="atrDirectionBuy">
+                                        <span>卖出</span>
+                                    </div>
+                                    <div class="direction-btn buy" data-direction="buy" id="atrDirectionSell">
+                                        <span>买入</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrMargin">投入资金 (USDT)</label>
+                                <input type="number" id="atrMargin" step="0.01" min="0.01" placeholder="请输入投入资金">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrMaxLoss">最大可接受亏损 (USDT)</label>
+                                <input type="number" id="atrMaxLoss" step="0.01" min="0.01" placeholder="请输入最大可接受亏损">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrValue">ATR值 (平均真实波幅)</label>
+                                <input type="number" id="atrValue" step="0.01" min="0.01" placeholder="请输入ATR值">
+                                <small style="color: #718096; font-size: 0.85rem;">需从其他工具或平台获取ATR值</small>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrMultiplier">ATR倍数</label>
+                                <input type="number" id="atrMultiplier" value="1.5" step="0.1" min="0.1" max="10">
+                                <small style="color: #718096; font-size: 0.85rem;">常用值：1.5-2.0</small>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrEntryPrice">开仓价格 (USDT)</label>
+                                <input type="number" id="atrEntryPrice" step="0.01" min="0.01" placeholder="请输入开仓价格">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="atrLeverage">杠杆倍数</label>
+                                <input type="number" id="atrLeverage" value="20" min="1" max="125">
+                            </div>
+
+                            <button class="calculate-btn" id="calculateBtnAtr">计算止损位置</button>
+
+                            <div class="notes" style="margin-top: 16px;">
+                                <h3>使用说明</h3>
+                                <ul style="list-style-type: disc; padding-left: 20px; color: #744210;">
+                                    <li>输入投入资金、最大亏损等参数</li>
+                                    <li>ATR值越高，市场波动越大，止损距离应设置得更宽</li>
+                                    <li>计算结果会显示两种止损位置供参考</li>
+                                    <li>建议选择更保守的止损位置</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="verification-section">
-                        <div class="verification-title">验证计算</div>
-                        <div class="verification-steps" id="verificationStepsReverse">
-                            <div class="step">价格变动: (2966.59 - 2937.22) / 2937.22 = 1.00%</div>
-                            <div class="step">杠杆放大亏损: 1.00% × 20 = 20.00%</div>
-                            <div class="step">投入资金亏损: 50 × 20.00% = 10.00 USDT</div>
-                            <div class="step">实际亏损与设定最大亏损匹配 ✓</div>
+                    <!-- 右侧：结果展示 -->
+                    <div style="flex: 1; min-width: 350px;">
+                        <!-- 止损结果 -->
+                        <div class="result-section" style="margin-bottom: 20px;">
+                            <h2 class="section-title">计算结果</h2>
+
+                            <!-- 基于最大亏损的止损 -->
+                            <div style="background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 6px; padding: 20px; margin-bottom: 16px;">
+                                <div style="font-size: 0.85rem; color: #2f855a; margin-bottom: 8px; font-weight: 600;">
+                                    基于最大亏损的止损位置
+                                </div>
+                                <div style="font-size: 2.2rem; font-weight: 700; color: #276749;" id="atrStopLossByLoss">
+                                    -
+                                </div>
+                                <div style="font-size: 0.9rem; color: #2f855a; margin-top: 4px;" id="atrStopLossByLossText">
+                                    -
+                                </div>
+                            </div>
+
+                            <!-- 基于ATR的止损 -->
+                            <div style="background: #fffaf0; border: 1px solid #fbd38d; border-radius: 6px; padding: 20px; margin-bottom: 20px;">
+                                <div style="font-size: 0.85rem; color: #975a16; margin-bottom: 8px; font-weight: 600;">
+                                    基于ATR的止损位置
+                                </div>
+                                <div style="font-size: 2.2rem; font-weight: 700; color: #975a16;" id="atrStopLossByATR">
+                                    -
+                                </div>
+                                <div style="font-size: 0.9rem; color: #975a16; margin-top: 4px;" id="atrStopLossByATRText">
+                                    -
+                                </div>
+                                <div style="font-size: 0.9rem; color: #975a16; margin-top: 8px;" id="atrStopLossByATRLoss">
+                                    -
+                                </div>
+                            </div>
+
+                            <!-- 详细信息 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+                                <div style="background: #f7fafc; padding: 12px; border-radius: 6px;">
+                                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 4px;">ATR止损距离</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: #2d3748;" id="atrStopLossDistance">
+                                        -
+                                    </div>
+                                </div>
+                                <div style="background: #f7fafc; padding: 12px; border-radius: 6px;">
+                                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 4px;">ATR止损比例</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: #2d3748;" id="atrStopLossRatio">
+                                        -
+                                    </div>
+                                </div>
+                                <div style="background: #f7fafc; padding: 12px; border-radius: 6px;">
+                                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 4px;">仓位价值</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: #2d3748;" id="atrPositionValue">
+                                        -
+                                    </div>
+                                </div>
+                                <div style="background: #f7fafc; padding: 12px; border-radius: 6px;">
+                                    <div style="font-size: 0.8rem; color: #718096; margin-bottom: 4px;">风险水平</div>
+                                    <div style="font-size: 1.1rem; font-weight: 600; color: #2d3748;" id="atrRiskLevel">
+                                        -
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 验证步骤 -->
+                            <div class="verification-section" style="margin-top: 20px;">
+                                <div class="verification-title">验证计算</div>
+                                <div class="verification-steps" id="atrVerificationSteps">
+                                    <div class="step">请输入参数并计算</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -539,6 +691,7 @@
             const modeTabs = document.querySelectorAll('.mode-tab');
             const modeForward = document.getElementById('modeForward');
             const modeReverse = document.getElementById('modeReverse');
+            const modeAtr = document.getElementById('modeAtr');
 
             modeTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -549,9 +702,16 @@
                     if (mode === 'forward') {
                         modeForward.classList.remove('hidden');
                         modeReverse.classList.add('hidden');
-                    } else {
+                        modeAtr.classList.add('hidden');
+                    } else if (mode === 'reverse') {
                         modeForward.classList.add('hidden');
                         modeReverse.classList.remove('hidden');
+                        modeAtr.classList.add('hidden');
+                    } else if (mode === 'atr') {
+                        modeForward.classList.add('hidden');
+                        modeReverse.classList.add('hidden');
+                        modeAtr.classList.remove('hidden');
+                        calculateAtr();
                     }
                 });
             });
@@ -722,7 +882,7 @@
                     // 投入资金 = 最大亏损 / ((目标价 - 开仓价) / 开仓价 * 杠杆)
                     const priceChangePercent = ((stopPrice - entryPrice) / entryPrice) * 100;
                     if (priceChangePercent <= 0) {
-                        showErrorReverse("卖出时目标价格必须高于开仓价格");
+                        showErrorReverse("卖出时止损价格必须高于开仓价格");
                         return;
                     }
 
@@ -744,7 +904,7 @@
                     // 投入资金 = 最大亏损 / ((开仓价 - 目标价) / 开仓价 * 杠杆)
                     const priceChangePercent = ((entryPrice - stopPrice) / entryPrice) * 100;
                     if (priceChangePercent <= 0) {
-                        showErrorReverse("买入时目标价格必须低于开仓价格");
+                        showErrorReverse("买入时止损价格必须低于开仓价格");
                         return;
                     }
 
@@ -803,6 +963,163 @@
                 marginReverse.textContent = '错误';
                 directionTextReverse.textContent = message;
                 verificationStepsReverse.innerHTML = `<div class="step" style="color: #f56565;">${message}</div>`;
+            }
+
+            // ========== ATR模式 ==========
+            // ATR交易方向
+            const atrDirectionBuy = document.getElementById('atrDirectionBuy');
+            const atrDirectionSell = document.getElementById('atrDirectionSell');
+            let atrDirection = 'sell';
+
+            [atrDirectionBuy, atrDirectionSell].forEach(btn => {
+                btn.addEventListener('click', function() {
+                    atrDirectionBuy.classList.remove('active');
+                    atrDirectionSell.classList.remove('active');
+                    this.classList.add('active');
+                    atrDirection = this.dataset.direction;
+                    calculateAtr();
+                });
+            });
+
+            // ATR输入元素
+            const atrMargin = document.getElementById('atrMargin');
+            const atrMaxLoss = document.getElementById('atrMaxLoss');
+            const atrValue = document.getElementById('atrValue');
+            const atrMultiplier = document.getElementById('atrMultiplier');
+            const atrEntryPrice = document.getElementById('atrEntryPrice');
+            const atrLeverage = document.getElementById('atrLeverage');
+
+            // ATR按钮
+            const calculateBtnAtr = document.getElementById('calculateBtnAtr');
+
+            // ATR输出元素
+            const atrStopLossByLoss = document.getElementById('atrStopLossByLoss');
+            const atrStopLossByLossText = document.getElementById('atrStopLossByLossText');
+            const atrStopLossByATR = document.getElementById('atrStopLossByATR');
+            const atrStopLossByATRText = document.getElementById('atrStopLossByATRText');
+            const atrStopLossByATRLoss = document.getElementById('atrStopLossByATRLoss');
+            const atrStopLossDistance = document.getElementById('atrStopLossDistance');
+            const atrStopLossRatio = document.getElementById('atrStopLossRatio');
+            const atrPositionValue = document.getElementById('atrPositionValue');
+            const atrRiskLevel = document.getElementById('atrRiskLevel');
+            const atrVerificationSteps = document.getElementById('atrVerificationSteps');
+
+            // 绑定事件
+            calculateBtnAtr.addEventListener('click', calculateAtr);
+
+            // 输入变化时自动计算
+            [atrMargin, atrMaxLoss, atrValue, atrMultiplier, atrEntryPrice, atrLeverage].forEach(input => {
+                input.addEventListener('change', calculateAtr);
+                input.addEventListener('keyup', function(e) {
+                    if (e.key === 'Enter') calculateAtr();
+                });
+            });
+
+            // 计算ATR止损位置
+            function calculateAtr() {
+                const margin = parseFloat(atrMargin.value);
+                const maxLoss = parseFloat(atrMaxLoss.value);
+                const atr = parseFloat(atrValue.value);
+                const multiplier = parseFloat(atrMultiplier.value);
+                const entryPrice = parseFloat(atrEntryPrice.value);
+                const leverage = parseFloat(atrLeverage.value);
+
+                if (isNaN(margin) || isNaN(maxLoss) || isNaN(atr) || isNaN(multiplier) ||
+                    isNaN(entryPrice) || isNaN(leverage) ||
+                    margin <= 0 || maxLoss <= 0 || atr <= 0 || multiplier <= 0 ||
+                    entryPrice <= 0 || leverage <= 0) {
+                    showAtrError("请输入有效的正数参数");
+                    return;
+                }
+
+                if (maxLoss >= margin) {
+                    showAtrError("最大亏损不能大于或等于投入资金");
+                    return;
+                }
+
+                // 计算仓位价值
+                const positionValue = margin * leverage;
+
+                // 计算风险水平
+                const riskLevelPercent = (maxLoss / margin) * 100;
+
+                // 计算基于最大亏损的价格变动
+                const priceChangeByLoss = (maxLoss / positionValue) * entryPrice;
+
+                // 计算基于最大亏损的止损价格
+                let stopLossByLoss;
+                if (atrDirection === 'buy') {
+                    stopLossByLoss = entryPrice - priceChangeByLoss;
+                } else {
+                    stopLossByLoss = entryPrice + priceChangeByLoss;
+                }
+
+                // 计算ATR止损距离
+                const atrStopLossDistance = atr * multiplier;
+
+                // 计算ATR止损比例
+                const atrStopLossRatioPercent = (atrStopLossDistance / entryPrice) * 100;
+
+                // 计算基于ATR的止损价格
+                let stopLossByATR;
+                if (atrDirection === 'buy') {
+                    stopLossByATR = entryPrice - atrStopLossDistance;
+                } else {
+                    stopLossByATR = entryPrice + atrStopLossDistance;
+                }
+
+                // 计算基于ATR止损的亏损金额
+                const atrLossAmount = (atrStopLossDistance / entryPrice) * positionValue;
+
+                // 显示结果
+                atrStopLossByLoss.textContent = stopLossByLoss.toFixed(2);
+                atrStopLossByLossText.textContent = `亏损: ${maxLoss.toFixed(2)} USDT`;
+
+                atrStopLossByATR.textContent = stopLossByATR.toFixed(2);
+                atrStopLossByATRText.textContent = `止损距离: ${atrStopLossDistance.toFixed(2)} USDT`;
+                atrStopLossByATRLoss.textContent = `亏损金额: ${atrLossAmount.toFixed(2)} USDT`;
+
+                atrStopLossDistance.textContent = `${atrStopLossDistance.toFixed(2)} USDT`;
+                atrStopLossRatio.textContent = `${atrStopLossRatioPercent.toFixed(2)}%`;
+                atrPositionValue.textContent = `${positionValue.toFixed(2)} USDT`;
+                atrRiskLevel.textContent = `${riskLevelPercent.toFixed(2)}%`;
+
+                // 验证步骤
+                const verification = [
+                    `投入资金: ${margin} USDT`,
+                    `杠杆倍数: ${leverage}`,
+                    `仓位价值: ${margin} × ${leverage} = ${positionValue.toFixed(2)} USDT`,
+                    `最大亏损: ${maxLoss} USDT`,
+                    `ATR值: ${atr}, ATR倍数: ${multiplier}`,
+                    atrDirection === 'buy'
+                        ? `基于最大亏损止损: ${entryPrice.toFixed(2)} - ${priceChangeByLoss.toFixed(2)} = ${stopLossByLoss.toFixed(2)} USDT`
+                        : `基于最大亏损止损: ${entryPrice.toFixed(2)} + ${priceChangeByLoss.toFixed(2)} = ${stopLossByLoss.toFixed(2)} USDT`,
+                    atrDirection === 'buy'
+                        ? `基于ATR止损: ${entryPrice.toFixed(2)} - ${atrStopLossDistance.toFixed(2)} = ${stopLossByATR.toFixed(2)} USDT`
+                        : `基于ATR止损: ${entryPrice.toFixed(2)} + ${atrStopLossDistance.toFixed(2)} = ${stopLossByATR.toFixed(2)} USDT`,
+                    `ATR止损亏损: (${atrStopLossDistance.toFixed(2)} / ${entryPrice.toFixed(2)}) × ${positionValue.toFixed(2)} = ${atrLossAmount.toFixed(2)} USDT`
+                ];
+
+                atrVerificationSteps.innerHTML = '';
+                verification.forEach(step => {
+                    const div = document.createElement('div');
+                    div.className = 'step';
+                    div.textContent = step;
+                    atrVerificationSteps.appendChild(div);
+                });
+            }
+
+            function showAtrError(message) {
+                atrStopLossByLoss.textContent = '错误';
+                atrStopLossByLossText.textContent = message;
+                atrStopLossByATR.textContent = '-';
+                atrStopLossByATRText.textContent = '-';
+                atrStopLossByATRLoss.textContent = '-';
+                atrStopLossDistance.textContent = '-';
+                atrStopLossRatio.textContent = '-';
+                atrPositionValue.textContent = '-';
+                atrRiskLevel.textContent = '-';
+                atrVerificationSteps.innerHTML = `<div class="step" style="color: #f56565;">${message}</div>`;
             }
         });
     </script>
