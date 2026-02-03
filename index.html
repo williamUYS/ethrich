@@ -711,7 +711,6 @@
                         modeForward.classList.add('hidden');
                         modeReverse.classList.add('hidden');
                         modeAtr.classList.remove('hidden');
-                        calculateAtr();
                     }
                 });
             });
@@ -780,9 +779,7 @@
                 });
             });
 
-            // 初始计算
-            calculateEntryPrice();
-            calculateMargin();
+            // 初始时不计算，等待用户输入
 
             // 方式一：计算开仓价格
             function calculateEntryPrice() {
