@@ -815,9 +815,9 @@
                     const actualLoss = margin * (leveragedLossPercent / 100);
 
                     verification = [
-                        `价格变动: (${stopPrice.toFixed(2)} - ${entryPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
-                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `价格变动: (${stopPrice.toFixed(8)} - ${entryPrice.toFixed(8)}) / ${entryPrice.toFixed(8)} = ${priceChangePercent.toFixed(8)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(8)}% × ${leverage} = ${leveragedLossPercent.toFixed(8)}%`,
+                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(8)}% = ${actualLoss.toFixed(8)} USDT`,
                         `实际亏损与设定最大亏损匹配 ✓`
                     ];
 
@@ -838,16 +838,16 @@
                     const actualLoss = margin * (leveragedLossPercent / 100);
 
                     verification = [
-                        `价格变动: (${entryPrice.toFixed(2)} - ${stopPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
-                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `价格变动: (${entryPrice.toFixed(8)} - ${stopPrice.toFixed(8)}) / ${entryPrice.toFixed(8)} = ${priceChangePercent.toFixed(8)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(8)}% × ${leverage} = ${leveragedLossPercent.toFixed(8)}%`,
+                        `投入资金亏损: ${margin} × ${leveragedLossPercent.toFixed(8)}% = ${actualLoss.toFixed(8)} USDT`,
                         `实际亏损与设定最大亏损匹配 ✓`
                     ];
 
                     directionTextForward.textContent = "买入方向 - 价格高于目标位";
                 }
 
-                entryPriceForward.textContent = entryPrice.toFixed(2);
+                entryPriceForward.textContent = formatNumber(entryPrice);
 
                 verificationStepsForward.innerHTML = '';
                 verification.forEach(step => {
@@ -889,9 +889,9 @@
                     const actualLoss = margin * (leveragedLossPercent / 100);
 
                     verification = [
-                        `价格变动: (${stopPrice.toFixed(2)} - ${entryPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
-                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `投入资金亏损: ${margin.toFixed(2)} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `价格变动: (${stopPrice.toFixed(8)} - ${entryPrice.toFixed(8)}) / ${entryPrice.toFixed(8)} = ${priceChangePercent.toFixed(8)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(8)}% × ${leverage} = ${leveragedLossPercent.toFixed(8)}%`,
+                        `投入资金亏损: ${margin.toFixed(8)} × ${leveragedLossPercent.toFixed(8)}% = ${actualLoss.toFixed(8)} USDT`,
                         `实际亏损与设定最大亏损匹配 ✓`
                     ];
 
@@ -911,16 +911,16 @@
                     const actualLoss = margin * (leveragedLossPercent / 100);
 
                     verification = [
-                        `价格变动: (${entryPrice.toFixed(2)} - ${stopPrice.toFixed(2)}) / ${entryPrice.toFixed(2)} = ${priceChangePercent.toFixed(2)}%`,
-                        `杠杆放大亏损: ${priceChangePercent.toFixed(2)}% × ${leverage} = ${leveragedLossPercent.toFixed(2)}%`,
-                        `投入资金亏损: ${margin.toFixed(2)} × ${leveragedLossPercent.toFixed(2)}% = ${actualLoss.toFixed(2)} USDT`,
+                        `价格变动: (${entryPrice.toFixed(8)} - ${stopPrice.toFixed(8)}) / ${entryPrice.toFixed(8)} = ${priceChangePercent.toFixed(8)}%`,
+                        `杠杆放大亏损: ${priceChangePercent.toFixed(8)}% × ${leverage} = ${leveragedLossPercent.toFixed(8)}%`,
+                        `投入资金亏损: ${margin.toFixed(8)} × ${leveragedLossPercent.toFixed(8)}% = ${actualLoss.toFixed(8)} USDT`,
                         `实际亏损与设定最大亏损匹配 ✓`
                     ];
 
                     directionTextReverse.textContent = "买入方向 - 价格高于目标位";
                 }
 
-                marginReverse.textContent = margin.toFixed(2);
+                marginReverse.textContent = formatNumber(margin);
 
                 verificationStepsReverse.innerHTML = '';
                 verification.forEach(step => {
@@ -1012,6 +1012,13 @@
                 });
             });
 
+            // 格式化数字：去除末尾多余的零
+            function formatNumber(num, decimals = 8) {
+                if (isNaN(num)) return '-';
+                const fixed = num.toFixed(decimals);
+                return fixed.replace(/\.?0+$/, '');
+            }
+
             // 计算ATR止损位置
             function calculateAtr() {
                 const margin = parseFloat(atrMargin.value);
@@ -1069,32 +1076,32 @@
                 const atrLossAmount = (atrStopLossDistance / entryPrice) * positionValue;
 
                 // 显示结果
-                atrStopLossByLoss.textContent = stopLossByLoss.toFixed(2);
-                atrStopLossByLossText.textContent = `亏损: ${maxLoss.toFixed(2)} USDT`;
+                atrStopLossByLoss.textContent = formatNumber(stopLossByLoss);
+                atrStopLossByLossText.textContent = `亏损: ${formatNumber(maxLoss)} USDT`;
 
-                atrStopLossByATR.textContent = stopLossByATR.toFixed(2);
-                atrStopLossByATRText.textContent = `止损距离: ${atrStopLossDistance.toFixed(2)} USDT`;
-                atrStopLossByATRLoss.textContent = `亏损金额: ${atrLossAmount.toFixed(2)} USDT`;
+                atrStopLossByATR.textContent = formatNumber(stopLossByATR);
+                atrStopLossByATRText.textContent = `止损距离: ${formatNumber(atrStopLossDistance)} USDT`;
+                atrStopLossByATRLoss.textContent = `亏损金额: ${formatNumber(atrLossAmount)} USDT`;
 
-                atrStopLossDistance.textContent = `${atrStopLossDistance.toFixed(2)} USDT`;
-                atrStopLossRatio.textContent = `${atrStopLossRatioPercent.toFixed(2)}%`;
-                atrPositionValue.textContent = `${positionValue.toFixed(2)} USDT`;
-                atrRiskLevel.textContent = `${riskLevelPercent.toFixed(2)}%`;
+                atrStopLossDistance.textContent = `${formatNumber(atrStopLossDistance)} USDT`;
+                atrStopLossRatio.textContent = `${formatNumber(atrStopLossRatioPercent)}%`;
+                atrPositionValue.textContent = `${formatNumber(positionValue)} USDT`;
+                atrRiskLevel.textContent = `${formatNumber(riskLevelPercent)}%`;
 
                 // 验证步骤
                 const verification = [
                     `投入资金: ${margin} USDT`,
                     `杠杆倍数: ${leverage}`,
-                    `仓位价值: ${margin} × ${leverage} = ${positionValue.toFixed(2)} USDT`,
+                    `仓位价值: ${margin} × ${leverage} = ${formatNumber(positionValue)} USDT`,
                     `最大亏损: ${maxLoss} USDT`,
                     `ATR值: ${atr}, ATR倍数: ${multiplier}`,
                     atrDirection === 'buy'
-                        ? `基于最大亏损止损: ${entryPrice.toFixed(2)} - ${priceChangeByLoss.toFixed(2)} = ${stopLossByLoss.toFixed(2)} USDT`
-                        : `基于最大亏损止损: ${entryPrice.toFixed(2)} + ${priceChangeByLoss.toFixed(2)} = ${stopLossByLoss.toFixed(2)} USDT`,
+                        ? `基于最大亏损止损: ${formatNumber(entryPrice)} - ${formatNumber(priceChangeByLoss)} = ${formatNumber(stopLossByLoss)} USDT`
+                        : `基于最大亏损止损: ${formatNumber(entryPrice)} + ${formatNumber(priceChangeByLoss)} = ${formatNumber(stopLossByLoss)} USDT`,
                     atrDirection === 'buy'
-                        ? `基于ATR止损: ${entryPrice.toFixed(2)} - ${atrStopLossDistance.toFixed(2)} = ${stopLossByATR.toFixed(2)} USDT`
-                        : `基于ATR止损: ${entryPrice.toFixed(2)} + ${atrStopLossDistance.toFixed(2)} = ${stopLossByATR.toFixed(2)} USDT`,
-                    `ATR止损亏损: (${atrStopLossDistance.toFixed(2)} / ${entryPrice.toFixed(2)}) × ${positionValue.toFixed(2)} = ${atrLossAmount.toFixed(2)} USDT`
+                        ? `基于ATR止损: ${formatNumber(entryPrice)} - ${formatNumber(atrStopLossDistance)} = ${formatNumber(stopLossByATR)} USDT`
+                        : `基于ATR止损: ${formatNumber(entryPrice)} + ${formatNumber(atrStopLossDistance)} = ${formatNumber(stopLossByATR)} USDT`,
+                    `ATR止损亏损: (${formatNumber(atrStopLossDistance)} / ${formatNumber(entryPrice)}) × ${formatNumber(positionValue)} = ${formatNumber(atrLossAmount)} USDT`
                 ];
 
                 atrVerificationSteps.innerHTML = '';
